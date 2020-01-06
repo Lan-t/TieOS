@@ -7,7 +7,7 @@
 #include "cpu/SegmentDescriptorTable.h"
 #include "interrupt.h"
 #include "cpu/InterruptDescriptorTable.h"
-
+#include "asm.h"
 
 
 
@@ -73,12 +73,16 @@ void _start(graphics_config::_GraphicsConfig *graphicsConfig, memory_map::_Memor
     }
 
     IDT.set(0, (uint64_t)interrupt::zero_div, 8, 0xe, 1, 0, 0);
+    IDT.set(0x21, (uint64_t)interrupt::keyboard, 8, 0xe, 1, 0, 0);
 
     IDT.load_interrupt_descriptor_table();
 
+    assembly::init_pic();
+    assembly::set_pic(0b1111'1101, 0b1111'1111);
+
     __asm__ volatile ("sti");
 
-    i = 10 / 0;
+//    i = 10 / 0;
 
     while (1) {
         __asm__ volatile ("hlt");

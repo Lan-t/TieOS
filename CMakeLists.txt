@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
+include(Compiler/Intel)
+__compiler_intel(ASM)
 project(TieOS)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -12,7 +14,8 @@ add_library(TieOS SHARED
         src/mathlib.cpp
         src/MemoryMap.cpp
         src/interrupt.cpp
-        src/assembly/test.s
+        src/asm.cpp
+        src/bufferlib.cpp
         )
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -nostdlib")
@@ -24,3 +27,4 @@ set_target_properties(TieOS PROPERTIES OUTPUT_NAME "kernel")
 set_target_properties(TieOS PROPERTIES SUFFIX ".elf")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -masm=intel")
+set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -masm=intel")
