@@ -2,8 +2,8 @@
 // Created by tia on 2020/01/04.
 //
 
-#ifndef TIEOS_SEGMENTDESCRIPTOR_H
-#define TIEOS_SEGMENTDESCRIPTOR_H
+#ifndef TIEOS_SEGMENTDESCRIPTORTABLE_H
+#define TIEOS_SEGMENTDESCRIPTORTABLE_H
 
 #include <cstdint>
 
@@ -160,4 +160,4 @@ namespace cpu {
     };
 }
 
-#endif //TIEOS_SEGMENTDESCRIPTOR_H
+#endif //TIEOS_SEGMENTDESCRIPTORTABLE_H

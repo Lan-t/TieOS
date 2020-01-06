@@ -8,7 +8,7 @@
 #include <cstdint>
 
 #include "main.h"
-#include "SegmentDescriptor.h"
+#include "SegmentDescriptorTable.h"
 
 namespace cpu {
     class InterruptDescriptor {

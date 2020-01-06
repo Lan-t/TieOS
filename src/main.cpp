@@ -4,7 +4,7 @@
 #include "GraphicsConfig.h"
 #include "MemoryMap.h"
 #include "stringlib.h"
-#include "cpu/SegmentDescriptor.h"
+#include "cpu/SegmentDescriptorTable.h"
 #include "interrupt.h"
 #include "cpu/InterruptDescriptorTable.h"
 
