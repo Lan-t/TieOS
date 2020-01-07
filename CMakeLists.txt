@@ -16,7 +16,7 @@ add_library(TieOS SHARED
         src/interrupt.cpp
         src/asm.cpp
         src/bufferlib.cpp
-        )
+        src/segment/SegmentDescriptorTable.cpp src/segment/InterruptDescriptorTable.cpp src/port/rtc.cpp)
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -nostdlib")
 list(REMOVE_ITEM CMAKE_CXX_IMPLICIT_LINK_LIBRARIES stdc++)

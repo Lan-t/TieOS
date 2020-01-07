@@ -103,12 +103,12 @@ namespace memory_map {
              (uint64_t) iter < (uint64_t) memory_map + memory_map_size; iter = (EFI_MEMORY_DESCRIPTOR *) (
                 (uint64_t) iter + descriptor_size), i++) {
             char start_addr_buf[17], end_addr_buf[17], size_buff[17];
-            tie_os_std::itoa((uint64_t) iter->PhysicalStart, start_addr_buf, 17, 16,
-                             tie_os_std::FILL_ZERO | tie_os_std::SET_NULL_TERMINATE);
-            tie_os_std::itoa((uint64_t) iter->PhysicalStart + iter->NumberOfPages * 0x1000 - 1, end_addr_buf, 17, 16,
-                             tie_os_std::FILL_ZERO | tie_os_std::SET_NULL_TERMINATE);
-            tie_os_std::itoa((uint64_t) iter->NumberOfPages * 0x1000, size_buff, 17, 16,
-                             tie_os_std::FILL_ZERO | tie_os_std::SET_NULL_TERMINATE);
+            tiestd::itoa((uint64_t) iter->PhysicalStart, start_addr_buf, 17, 16,
+                         tiestd::FILL_ZERO | tiestd::SET_NULL_TERMINATE);
+            tiestd::itoa((uint64_t) iter->PhysicalStart + iter->NumberOfPages * 0x1000 - 1, end_addr_buf, 17, 16,
+                         tiestd::FILL_ZERO | tiestd::SET_NULL_TERMINATE);
+            tiestd::itoa((uint64_t) iter->NumberOfPages * 0x1000, size_buff, 17, 16,
+                         tiestd::FILL_ZERO | tiestd::SET_NULL_TERMINATE);
             uint32_t color = 0xffffffff;
             if (is_usable_memory_type(iter->Type)) {
                 color = 0xffffff00;
@@ -119,8 +119,8 @@ namespace memory_map {
         }
 
         char func_addr_buf[17], var_addr_buf[17], frame_buffer_addr_buf[17];
-        tie_os_std::itoa((uint64_t) var_addr_buf, var_addr_buf, 17, 16,
-                         tie_os_std::SET_NULL_TERMINATE | tie_os_std::FILL_ZERO);
+        tiestd::itoa((uint64_t) var_addr_buf, var_addr_buf, 17, 16,
+                     tiestd::SET_NULL_TERMINATE | tiestd::FILL_ZERO);
 
         graphicsConfig.put_strings(x, ++y, 0xffffffff, "var:var_addr_buf:          ", var_addr_buf, nullptr);
     }

@@ -12,7 +12,7 @@
 
 #define BUFFER_LENGTH 40
 
-namespace tie_os_std {
+namespace tiestd {
     extern uint8_t buf[];
 
     class RingBuffer {

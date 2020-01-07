@@ -44,16 +44,23 @@ namespace graphics_config {
     class GraphicsConfig {
     private:
         uint8_t *frame_buffer;
-        uint32_t horizontal_resolution;
-        uint32_t vertical_resolution;
+        uint32_t width;
+        uint32_t height;
         EFI_GRAPHICS_PIXEL_FORMAT pixel_format;
         _EFI_PIXEL_BITMASK pixel_information;
         uint32_t pixel_per_scan_line;
         uint32_t version;
 
+        uint64_t console_width;
+        uint64_t console_height;
+
     public:
-        GraphicsConfig() {};
+        GraphicsConfig() {}
         GraphicsConfig(_GraphicsConfig*);
+
+        uint64_t get_console_width();
+        uint64_t get_console_height();
+
         void fill_screen(uint32_t);
         bool draw_pixel(uint64_t x, uint64_t y, uint32_t color);
         bool draw_char(char c, uint64_t x, uint64_t y, uint32_t color);

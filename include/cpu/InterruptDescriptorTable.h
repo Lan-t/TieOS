@@ -10,7 +10,7 @@
 #include "main.h"
 #include "SegmentDescriptorTable.h"
 
-namespace cpu {
+namespace segment {
     class InterruptDescriptor {
     private:
         uint16_t m_offset_00_15;
@@ -54,6 +54,10 @@ namespace cpu {
         uint64_t length = 0;
 
     public:
+        InterruptDescriptorTable() {
+            interrupt_descriptor_table = (InterruptDescriptor*)0;
+        }
+
         InterruptDescriptorTable(void *offset) {
             interrupt_descriptor_table = (InterruptDescriptor *) offset;
         }
@@ -81,6 +85,8 @@ namespace cpu {
                                                      IST);
         }
     };
+
+    extern InterruptDescriptorTable IDT;
 }
 
 #endif //TIEOS_INTERRUPTDESCRIPTORTABLE_H

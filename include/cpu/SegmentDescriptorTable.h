@@ -7,7 +7,7 @@
 
 #include <cstdint>
 
-namespace cpu {
+namespace segment {
 
 #pragma pack(1)
 
@@ -91,6 +91,10 @@ namespace cpu {
         SegmentDescriptor *segment_descriptor_table;
         uint64_t length = 0;
     public:
+        SegmentDescriptorTable() {
+            segment_descriptor_table = (SegmentDescriptor *)0;
+        }
+
         SegmentDescriptorTable(void *offset) {
             segment_descriptor_table = (SegmentDescriptor *) offset;
         }
@@ -158,6 +162,8 @@ namespace cpu {
             segment_descriptor_table[length ++].set_code64(Conforming, Readable, Accessed, Granularity, Default, LongMode, Present, DescriptorPrivilegeLevel);
         }
     };
+
+    extern SegmentDescriptorTable GDT;
 }
 
 #endif //TIEOS_SEGMENTDESCRIPTORTABLE_H

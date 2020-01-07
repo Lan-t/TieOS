@@ -6,7 +6,7 @@
 #include "stringlib.h"
 #include "mathlib.h"
 
-namespace tie_os_std {
+namespace tiestd {
 
     static const char NUMBER[] = "0123456789abcdefghijklmnopqrstuvwxyz";
     static const char NUMBER_UPPERCASE[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -46,6 +46,10 @@ namespace tie_os_std {
             DIVMOD dm = divmod(remain, radix);
             remain = dm.div;
             tmp_buff[--i] = charset[dm.mod];
+        }
+
+        if (i == buffer_size && flags & ZERO_IS_EMPTY && buffer_size) {
+            tmp_buff[--i] = charset[0];
         }
 
         uint64_t j;

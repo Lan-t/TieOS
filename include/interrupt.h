@@ -14,14 +14,14 @@
 
 
 namespace interrupt {
-    extern tie_os_std::RingBuffer key_buffer;
+    extern tiestd::RingBuffer key_buffer;
 
     void stop();
 
     void int_default();
     void zero_div();
     void keyboard();
-
+    void rtc();
 }
 
 #endif //TIEOS_INTERRUPT_H

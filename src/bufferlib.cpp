@@ -9,7 +9,7 @@
 #include "bufferlib.h"
 
 
-namespace tie_os_std {
+namespace tiestd {
     uint8_t buf[3 * BUFFER_LENGTH] = {0};
 
 

@@ -7,7 +7,7 @@
 
 #include <cstdint>
 
-namespace tie_os_std {
+namespace tiestd {
 
     enum ITOA_FRAGS {
         DEFAULT             = 0,
@@ -17,6 +17,7 @@ namespace tie_os_std {
         SET_SIGN            = 0x8,
         UPPERCASE           = 0x10,
         SET_NULL_TERMINATE  = 0x20,
+        ZERO_IS_EMPTY       = 0x40
     };
 
     void itoa(uint64_t value, char *buffer, uint64_t buffer_size, uint64_t radix, uint32_t flags);

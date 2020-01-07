@@ -16,7 +16,7 @@ memory_map::MemoryMap gMemoryMap;
 
 
 
-using namespace tie_os_std;
+using namespace tiestd;
 
 int64_t f(int64_t x) {
     return x * x * x / 25;
@@ -40,45 +40,26 @@ void _start(graphics_config::_GraphicsConfig *graphicsConfig, memory_map::_Memor
 
     __asm__ volatile ("cli");
 
-    auto GDT = cpu::SegmentDescriptorTable((void*)0x1000);
-    GDT.push(0);
-    GDT.push_code64(0, 1, 1, 1, 0, 1, 1, 0);
-    GDT.push_data(0, 0xffffff, 0, 1, 1, 1, 1, 1, 0);
-
-    GDT.load_global_descriptor_table();
-
-    GDT.set_segment(8, 16, 16);
-
-    cpu::DTR gdtr;
-    asm(
-            "lea rax, %0 \n"
-            "sgdt [rax]"
-            : : "m"(gdtr)
-            );
-
-    i = 32;
-
-    for (auto *a = (uint64_t*)gdtr.base; (uint64_t)a <= gdtr.base + gdtr.limit; a ++) {
-        itoa(*a, buf, 17, 16, SET_NULL_TERMINATE | FILL_ZERO);
-        gGraphicsConfig.put_string(buf, 20, i ++, 0xffffffff);
-    }
+    segment::GDT = segment::SegmentDescriptorTable((void*)0x0);
+    segment::GDT.push(0);
+    segment::GDT.push_code64(0, 1, 1, 1, 0, 1, 1, 0);
+    segment::GDT.push_data(0, 0xffffff, 0, 1, 1, 1, 1, 1, 0);
+    segment::GDT.load_global_descriptor_table();
+    segment::GDT.set_segment(8, 16, 16);
 
 
-
-
-    auto IDT = cpu::InterruptDescriptorTable((void*)0x2000);
-
+    segment::IDT = segment::InterruptDescriptorTable((void*)0x2000);
     for (uint64_t i = 0; i < 256; i ++) {
-        IDT.push((uint64_t)interrupt::int_default, 8, 0xe, 1, 0, 0);
+        segment::IDT.push((uint64_t)interrupt::int_default, 8, 0xe, 1, 0, 0);
     }
+    segment::IDT.set(0, (uint64_t)interrupt::zero_div, 8, 0xe, 1, 0, 0);
+    segment::IDT.set(0x21, (uint64_t)interrupt::keyboard, 8, 0xe, 1, 0, 0);
+    segment::IDT.set(0x28, (uint64_t)interrupt::rtc, 8, 0xe, 1, 0, 0);
+    segment::IDT.load_interrupt_descriptor_table();
 
-    IDT.set(0, (uint64_t)interrupt::zero_div, 8, 0xe, 1, 0, 0);
-    IDT.set(0x21, (uint64_t)interrupt::keyboard, 8, 0xe, 1, 0, 0);
-
-    IDT.load_interrupt_descriptor_table();
-
+    assembly::init_rtc();
     assembly::init_pic();
-    assembly::set_pic(0b1111'1101, 0b1111'1111);
+    assembly::set_pic(0b1111'1001, 0b1111'1110);
 
     __asm__ volatile ("sti");
 

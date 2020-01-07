@@ -5,7 +5,7 @@
 #include <cstdint>
 #include "mathlib.h"
 
-namespace tie_os_std {
+namespace tiestd {
 
     DIVMOD divmod(int64_t x, int64_t y) {
         DIVMOD ans;

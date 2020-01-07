@@ -7,7 +7,7 @@
 
 #include <cstdint>
 
-namespace tie_os_std {
+namespace tiestd {
 
     typedef struct DIVMOD {
         int64_t div;

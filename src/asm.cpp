@@ -35,4 +35,13 @@ namespace assembly {
         outp_m(0x21, master);
         outp_m(0xa1, slave);
     }
+
+    void init_rtc() {
+        outp(0x70, 0x0b);
+        __asm__ volatile (
+                "in al, 0x71 \n"
+                "or al, 0x10 \n"
+                "out 0x71, al"
+                );
+    }
 }
