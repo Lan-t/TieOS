@@ -15,6 +15,7 @@
 
 namespace interrupt {
     tiestd::RingBuffer key_buffer;
+    rtc::DateTimePack rtc_datetime;
 
     void stop() {
         while (1) {
@@ -49,7 +50,7 @@ namespace interrupt {
     }
 
     void rtc() {
-        rtc::DateTimePack date_time = rtc::get_time();
+        rtc::DateTimePack date_time = rtc::get_datetime();
 
         __asm__ volatile (
         "mov al, 0x0c \n"
@@ -70,7 +71,20 @@ namespace interrupt {
         tiestd::itoa(date_time.sech, buf + 6, 1, 10, tiestd::FILL_SPACE);
         tiestd::itoa(date_time.secl, buf + 7, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
         buf[8] = 0;
+
         gGraphicsConfig.put_string(buf, gGraphicsConfig.get_console_width() - 8, 0, 0x0f0f0f, 0xffffff);
+
+        tiestd::itoa(date_time.yerh, buf, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.yerl, buf + 1, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[2] = '/';
+        tiestd::itoa(date_time.monh, buf + 3, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.monl, buf + 4, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[5] = '/';
+        tiestd::itoa(date_time.dayh, buf + 6, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.dayl, buf + 7, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[8] = 0;
+
+        gGraphicsConfig.put_string(buf, gGraphicsConfig.get_console_width() - 17, 0, 0x0f0f0f, 0xffffff);
 
         __asm__ volatile (
         "leave \n"

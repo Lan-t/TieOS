@@ -41,6 +41,7 @@ namespace rtc {
 #pragma pack()
 
     DateTimePack get_time();
+    DateTimePack get_datetime();
 
 }
 

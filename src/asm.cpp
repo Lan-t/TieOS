@@ -44,4 +44,8 @@ namespace assembly {
                 "out 0x71, al"
                 );
     }
+
+    void init_timer() {
+
+    }
 }
