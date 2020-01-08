@@ -13,7 +13,6 @@
 #define BUFFER_LENGTH 40
 
 namespace tiestd {
-    extern uint8_t buf[];
 
     class RingBuffer {
     private:

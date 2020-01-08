@@ -53,19 +53,27 @@ void _start(graphics_config::_GraphicsConfig *graphicsConfig, memory_map::_Memor
         segment::IDT.push((uint64_t)interrupt::int_default, 8, 0xe, 1, 0, 0);
     }
     segment::IDT.set(0, (uint64_t)interrupt::zero_div, 8, 0xe, 1, 0, 0);
+    segment::IDT.set(0x20, (uint64_t)interrupt::timer, 8, 0xe, 1, 0, 0);
     segment::IDT.set(0x21, (uint64_t)interrupt::keyboard, 8, 0xe, 1, 0, 0);
     segment::IDT.set(0x28, (uint64_t)interrupt::rtc, 8, 0xe, 1, 0, 0);
     segment::IDT.load_interrupt_descriptor_table();
 
     assembly::init_rtc();
     assembly::init_pic();
-    assembly::set_pic(0b1111'1001, 0b1111'1110);
+    assembly::init_timer();
+    assembly::set_pic(0b1111'1000, 0b1111'1110);
 
     __asm__ volatile ("sti");
 
 //    i = 10 / 0;
 
+    const char *rotation_bar = "|/-\\";
+
     while (1) {
+
+        gGraphicsConfig.put_time(interrupt::rtc_datetime, gGraphicsConfig.get_console_width() - 17, 0);
+        gGraphicsConfig.put_char(rotation_bar[interrupt::timer_count / 10 % 4], 0, gGraphicsConfig.get_console_height()-1, 0xffffff, 0x000000);
+
         __asm__ volatile ("hlt");
     }
 }

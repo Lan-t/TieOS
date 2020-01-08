@@ -12,10 +12,16 @@
 #include "bufferlib.h"
 #include "port/rtc.h"
 
+#define interrupt_return __asm__ volatile (\
+"leave \n" \
+"iretq" \
+)
+
 
 namespace interrupt {
     tiestd::RingBuffer key_buffer;
     rtc::DateTimePack rtc_datetime;
+    uint64_t timer_count = 0;
 
     void stop() {
         while (1) {
@@ -43,14 +49,13 @@ namespace interrupt {
         "mov al, 0x20 \n"
         "out 0x20, al"
         );
-        __asm__ volatile (
-        "leave \n"
-        "iretq"
-        );
+
+        interrupt_return;
     }
 
     void rtc() {
         rtc::DateTimePack date_time = rtc::get_datetime();
+        rtc_datetime = date_time;
 
         __asm__ volatile (
         "mov al, 0x0c \n"
@@ -61,34 +66,17 @@ namespace interrupt {
         "out 0x20, al"
         );
 
-        char buf[9];
-        tiestd::itoa(date_time.horh, buf, 1, 10, tiestd::FILL_SPACE);
-        tiestd::itoa(date_time.horl, buf + 1, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
-        buf[2] = ':';
-        tiestd::itoa(date_time.minh, buf + 3, 1, 10, tiestd::FILL_SPACE);
-        tiestd::itoa(date_time.minl, buf + 4, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
-        buf[5] = ':';
-        tiestd::itoa(date_time.sech, buf + 6, 1, 10, tiestd::FILL_SPACE);
-        tiestd::itoa(date_time.secl, buf + 7, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
-        buf[8] = 0;
+        interrupt_return;
+    }
 
-        gGraphicsConfig.put_string(buf, gGraphicsConfig.get_console_width() - 8, 0, 0x0f0f0f, 0xffffff);
-
-        tiestd::itoa(date_time.yerh, buf, 1, 10, tiestd::FILL_SPACE);
-        tiestd::itoa(date_time.yerl, buf + 1, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
-        buf[2] = '/';
-        tiestd::itoa(date_time.monh, buf + 3, 1, 10, tiestd::FILL_SPACE);
-        tiestd::itoa(date_time.monl, buf + 4, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
-        buf[5] = '/';
-        tiestd::itoa(date_time.dayh, buf + 6, 1, 10, tiestd::FILL_SPACE);
-        tiestd::itoa(date_time.dayl, buf + 7, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
-        buf[8] = 0;
-
-        gGraphicsConfig.put_string(buf, gGraphicsConfig.get_console_width() - 17, 0, 0x0f0f0f, 0xffffff);
+    void timer() {
+        timer_count++;
 
         __asm__ volatile (
-        "leave \n"
-        "iretq"
+        "mov al, 0x20 \n"
+        "out 0x20, al"
         );
+
+        interrupt_return;
     }
 }

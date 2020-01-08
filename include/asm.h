@@ -11,6 +11,7 @@ namespace assembly {
     void init_pic();
     void set_pic(uint8_t master, uint8_t slave);
     void init_rtc();
+    void init_timer();
 }
 
 #endif //TIEOS_ASM_H

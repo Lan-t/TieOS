@@ -10,8 +10,6 @@
 
 
 namespace tiestd {
-    uint8_t buf[3 * BUFFER_LENGTH] = {0};
-
 
     int RingBuffer::write(uint8_t value) {
         if ((wp + 1) % BUFFER_LENGTH == rp) {
@@ -32,6 +30,7 @@ namespace tiestd {
     }
 
     void RingBuffer::put(uint64_t x, uint64_t y, uint32_t color) {
+        uint8_t buf[3 * BUFFER_LENGTH] = {0};
         for (uint64_t i = 0, p = rp; i < BUFFER_LENGTH; i ++, p --) {
             itoa(buffer[p], (char*)(buf + i * 3), 2, 16, FILL_ZERO);
             buf[i * 3 + 2] = ' ';

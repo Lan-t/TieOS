@@ -6,6 +6,9 @@
 #include <cstdarg>
 
 #include "GraphicsConfig.h"
+#include "port/rtc.h"
+#include "stringlib.h"
+
 
 namespace graphics_config {
 
@@ -145,6 +148,34 @@ namespace graphics_config {
             }
         }
         return !ret;
+    }
+
+    void GraphicsConfig::put_time(rtc::DateTimePack date_time, uint64_t x, uint64_t y) {
+        char buf[9];
+
+        tiestd::itoa(date_time.horh, buf, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.horl, buf + 1, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[2] = ':';
+        tiestd::itoa(date_time.minh, buf + 3, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.minl, buf + 4, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[5] = ':';
+        tiestd::itoa(date_time.sech, buf + 6, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.secl, buf + 7, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[8] = 0;
+
+        put_string(buf, x + 9, 0, 0x0f0f0f, 0xffffff);
+
+        tiestd::itoa(date_time.yerh, buf, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.yerl, buf + 1, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[2] = '/';
+        tiestd::itoa(date_time.monh, buf + 3, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.monl, buf + 4, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[5] = '/';
+        tiestd::itoa(date_time.dayh, buf + 6, 1, 10, tiestd::FILL_SPACE);
+        tiestd::itoa(date_time.dayl, buf + 7, 1, 10, tiestd::FILL_SPACE | tiestd::ZERO_IS_EMPTY);
+        buf[8] = 0;
+
+        put_string(buf, x, y, 0x0f0f0f, 0xffffff);
     }
 
 

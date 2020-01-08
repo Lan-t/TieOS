@@ -46,6 +46,8 @@ namespace assembly {
     }
 
     void init_timer() {
-
+        outp(0x43, 0b00110100);
+        outp(0x40, 0x9c);
+        outp(0x40, 0x2e);
     }
 }

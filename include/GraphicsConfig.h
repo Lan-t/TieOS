@@ -8,6 +8,9 @@
 
 #include <cstdint>
 
+#include "port/rtc.h"
+
+
 namespace graphics_config {
 
     extern uint8_t FONT0[0x100][16];
@@ -71,6 +74,7 @@ namespace graphics_config {
         bool put_string(const char * str, uint64_t x, uint64_t y, uint32_t color, uint32_t bg_color);
         bool put_strings(uint64_t x, uint64_t y, uint32_t color, ...);
         bool put_strings(uint64_t x, uint64_t y, uint32_t color, uint32_t bg_color, ...);
+        void put_time(rtc::DateTimePack date_time, uint64_t x, uint64_t y);
     };
 }
 
